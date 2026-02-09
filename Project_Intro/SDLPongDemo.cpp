@@ -4,7 +4,7 @@
 
 int main()
 {
-	constexpr int ScreenWidth = 1200;
+	constexpr int ScreenWidth = 1800;
 	constexpr int ScreenHeight = 720;
 
 	SDL_Init(SDL_INIT_VIDEO);
@@ -29,10 +29,12 @@ int main()
 		return -1;
 	}
 
+	//Setting and declaring values
+
 	bool running{true};
 
 	const float PadWidth { 15.f };
-	const float PadHeight {100.f};
+	const float PadHeight {125.f};
 
 	const float PlayerOneX = 10.0f;
 	const float PlayerTwoX = ScreenWidth - PadWidth - PlayerOneX;
@@ -65,6 +67,8 @@ int main()
 
 	while (running)
 	{
+		//Player movement 
+
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
@@ -81,8 +85,8 @@ int main()
 				if (event.key.key == SDLK_W) isWPressed = true;
 				if (event.key.key == SDLK_S) isSPressed = true;
 
-				if (event.key.key == SDLK_O) isOPressed = true;
-				if (event.key.key == SDLK_L) isLPressed = true;
+				if (event.key.key == SDLK_UP) isOPressed = true;
+				if (event.key.key == SDLK_DOWN) isLPressed = true;
 			}
 
 			if (event.type == SDL_EventType::SDL_EVENT_KEY_UP)
@@ -90,8 +94,8 @@ int main()
 				if (event.key.key == SDLK_W) isWPressed = false;
 				if (event.key.key == SDLK_S) isSPressed = false;
 
-				if (event.key.key == SDLK_O) isOPressed = false;
-				if (event.key.key == SDLK_L) isLPressed = false;
+				if (event.key.key == SDLK_UP) isOPressed = false;
+				if (event.key.key == SDLK_DOWN) isLPressed = false;
 			}
 		}
 
@@ -124,6 +128,36 @@ int main()
 		{
 			velY *= -1;
 		}
+
+		//Stops the paddles from leaving map
+
+		if (POneY < 0)
+		{
+			POneY= 0;
+		}
+
+		if (POneY > ScreenHeight- PadHeight)
+		{
+			POneY = ScreenHeight - PadHeight;
+		}
+
+		if (PTwoY < 0)
+		{
+			PTwoY = 0;
+		}
+
+		if (PTwoY > ScreenHeight - PadHeight)
+		{
+			PTwoY = ScreenHeight - PadHeight;
+		}
+
+		//Checking if ball and paddles are overlapping
+
+
+
+		// best to 3 system
+
+
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
