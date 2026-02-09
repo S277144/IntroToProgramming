@@ -18,7 +18,7 @@ int main()
 		std::cout << "Enter your number between 1 and 100\n";
 		std::cin >> guess;
 
-		if (guess == higher)
+		if (guess == number)
 		{
 			std::cout << "You have guessed correctly\n";
 		}
