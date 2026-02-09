@@ -60,6 +60,8 @@ int main()
 
 	bool isWPressed{ false };
 	bool isSPressed{ false };
+	bool isOPressed{ false };
+	bool isLPressed{ false };
 
 	while (running)
 	{
@@ -72,17 +74,24 @@ int main()
 				running = false;
 				break;
 			}
+
 			if (event.type == SDL_EventType::SDL_EVENT_KEY_DOWN)
 			{
 				if (event.key.key == SDLK_ESCAPE) running = false;
 				if (event.key.key == SDLK_W) isWPressed = true;
 				if (event.key.key == SDLK_S) isSPressed = true;
+
+				if (event.key.key == SDLK_O) isOPressed = true;
+				if (event.key.key == SDLK_L) isLPressed = true;
 			}
 
 			if (event.type == SDL_EventType::SDL_EVENT_KEY_UP)
 			{
 				if (event.key.key == SDLK_W) isWPressed = false;
 				if (event.key.key == SDLK_S) isSPressed = false;
+
+				if (event.key.key == SDLK_O) isOPressed = false;
+				if (event.key.key == SDLK_L) isLPressed = false;
 			}
 		}
 
@@ -95,7 +104,18 @@ int main()
 			POneY += PlayerSpeed;
 		}
 
+		if (isOPressed)
+		{
+			PTwoY -= PlayerSpeed;
+		}
+		if (isLPressed)
+		{
+			PTwoY += PlayerSpeed;
+		}
+	
+
 		player_one.y = POneY;
+		player_two.y = PTwoY;
 
 		ball.x += velX;
 		ball.y += velY;
