@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Project_Intro\NumberGenGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Project_Intro\NumberGenGameTutorial.cpp">
+    <ClCompile Include="..\Project_Intro\NumberGenGameDemo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
