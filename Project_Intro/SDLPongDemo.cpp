@@ -27,7 +27,7 @@ class Ball
 int main()
 {
 	constexpr int ScreenWidth = 1500;
-	constexpr int ScreenHeight = 720;
+	constexpr int ScreenHeight = 800;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -55,6 +55,8 @@ int main()
 
 	bool running{true};
 
+	const float PlayArea = ScreenHeight - 150;
+
 	const float PadWidth { 15.f };
 	const float PadHeight {100.f};
 
@@ -62,7 +64,7 @@ int main()
 	const float PlayerTwoX = ScreenWidth - PadWidth - PlayerOneX;
 		
 	const float PlayerY = ScreenHeight / 2.0f - PadHeight / 2.0f;
-	const float PlayerSpeed{ 0.1f };
+	const float PlayerSpeed{ 0.08f };
 
 	SDL_FRect player_one{ PlayerOneX, PlayerY, PadWidth, PadHeight };
 	SDL_FRect player_two{ PlayerTwoX, PlayerY, PadWidth, PadHeight };
@@ -70,7 +72,7 @@ int main()
 	const float BallDim{ 12.5f };
 	const float BallX = { ScreenWidth / 2.0f - BallDim / 2.0f };
 	const float BallY = { ScreenHeight / 2.0f - BallDim / 2.0f };
-	const float Ballspeed{ 0.15f };
+	const float Ballspeed{ 0.11f };
 
     SDL_FRect ball{ BallX, BallY, BallDim, BallDim };
 
@@ -152,11 +154,6 @@ int main()
 		ball.x += velX;
 		ball.y += velY;
 
-		if (ball.y <= 0 || ball.y + BallDim >= ScreenHeight)
-		{
-			velY *= -1;
-		}
-
 		//Stops the paddles from leaving map
 
 		if (POneY < 0)
@@ -164,9 +161,9 @@ int main()
 			POneY= 0;
 		}
 
-		if (POneY > ScreenHeight- PadHeight)
+		if (POneY > PlayArea - PadHeight)
 		{
-			POneY = ScreenHeight - PadHeight;
+			POneY = PlayArea - PadHeight;
 		}
 
 		if (PTwoY < 0)
@@ -174,9 +171,9 @@ int main()
 			PTwoY = 0;
 		}
 
-		if (PTwoY > ScreenHeight - PadHeight)
+		if (PTwoY > PlayArea - PadHeight)
 		{
-			PTwoY = ScreenHeight - PadHeight;
+			PTwoY = PlayArea - PadHeight;
 		}
 
 		//Checking if ball and paddles are overlapping
@@ -186,6 +183,11 @@ int main()
 		score.y = ScreenWidth / 2.0f;
 		score.x = ScreenWidth / 2.0f;
 
+		if (ball.y <= 0 || ball.y + BallDim >= PlayArea)
+		{
+			velY *= -1;
+		}
+				
 		if (SDL_HasRectIntersectionFloat (&player_one ,&ball))
 		{
 			velX *= -1;
@@ -200,8 +202,8 @@ int main()
 
 		if (ball.x > ScreenWidth) 
 		{
-			ball.x = ScreenWidth / 2.0f - BallDim / 2.0f;
-			ball.y = ScreenHeight / 2.0f - BallDim / 2.0f;
+			ball.x = ScreenWidth * 0.9f - BallDim / 2.0f;
+			ball.y = (ScreenHeight - 150) / 2.0f - BallDim / 2.0f;
 
 			velX *= -1;
 
@@ -210,8 +212,8 @@ int main()
 
 		if (ball.x < 0)
 		{
-			ball.x = ScreenWidth / 2.0f - BallDim / 2.0f;
-			ball.y = ScreenHeight / 2.0f - BallDim / 2.0f;
+			ball.x = ScreenWidth / 9.0f - BallDim / 2.0f;
+			ball.y = (ScreenHeight - 150) / 2.0f - BallDim / 2.0f;
 
 			velX *= -1;
 
@@ -222,11 +224,27 @@ int main()
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
+		SDL_FRect border{ 0, ScreenHeight - 150.0f, ScreenWidth, 150.0f };
+		SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+		SDL_RenderFillRect(renderer, &border);
+
+		SDL_FRect goal{ 715.0f, PlayArea, 100.0f, 150.0f };
+		SDL_SetRenderDrawColor(renderer, 242, 198, 52, 255);
+		SDL_RenderFillRect(renderer, &goal);
+
 		SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
 		SDL_RenderFillRect(renderer, &player_one);
 
+		SDL_FRect pointone{ 0, ScreenHeight - 150.0f, 200.0f, ScreenHeight - PlayArea };
+		SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
+		SDL_RenderFillRect(renderer, &pointone);
+
 		SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
 		SDL_RenderFillRect(renderer, &player_two);
+
+		SDL_FRect pointtwo{ 1300, ScreenHeight - 150.0f, 200.0f, ScreenHeight - PlayArea };
+		SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
+		SDL_RenderFillRect(renderer, &pointtwo);
 
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderFillRect(renderer, &ball);
