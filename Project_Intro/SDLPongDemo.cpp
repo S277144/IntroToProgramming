@@ -2,9 +2,31 @@
 
 #include <SDL3\SDL.h>
 
+
+
+struct Paddle
+{
+	float y;
+	SDL_FRect rect;
+
+
+private:
+	uint8_t score;
+};
+
+class Ball
+{
+
+	float x;
+	float y;
+	float vel_X;
+	float vel_Y;
+	SDL_FRect rect;
+};
+
 int main()
 {
-	constexpr int ScreenWidth = 1800;
+	constexpr int ScreenWidth = 1500;
 	constexpr int ScreenHeight = 720;
 
 	SDL_Init(SDL_INIT_VIDEO);
@@ -34,7 +56,7 @@ int main()
 	bool running{true};
 
 	const float PadWidth { 15.f };
-	const float PadHeight {125.f};
+	const float PadHeight {100.f};
 
 	const float PlayerOneX = 10.0f;
 	const float PlayerTwoX = ScreenWidth - PadWidth - PlayerOneX;
@@ -45,12 +67,12 @@ int main()
 	SDL_FRect player_one{ PlayerOneX, PlayerY, PadWidth, PadHeight };
 	SDL_FRect player_two{ PlayerTwoX, PlayerY, PadWidth, PadHeight };
 
-	const float BallDim { 12.5f };
+	const float BallDim{ 12.5f };
 	const float BallX = { ScreenWidth / 2.0f - BallDim / 2.0f };
 	const float BallY = { ScreenHeight / 2.0f - BallDim / 2.0f };
-	const float Ballspeed{ 0.05f };
+	const float Ballspeed{ 0.15f };
 
-	SDL_FRect ball{ BallX, BallY, BallDim, BallDim };
+    SDL_FRect ball{ BallX, BallY, BallDim, BallDim };
 
 	float POneY = PlayerY;
 	float PTwoY = PlayerY;
@@ -64,6 +86,12 @@ int main()
 	bool isSPressed{ false };
 	bool isOPressed{ false };
 	bool isLPressed{ false };
+
+	const int MaxScore { 5 };
+	constexpr float TallyWidth { 10.0f };
+	constexpr float TallyGap { 10.0f };
+	constexpr float TallyOneStartX { 20.0f };
+	constexpr float TallyTwoStartX { ScreenWidth - (MaxScore * (TallyWidth + TallyGap))};
 
 	while (running)
 	{
@@ -153,19 +181,51 @@ int main()
 
 		//Checking if ball and paddles are overlapping
 
+		SDL_FRect score;
 
+		score.y = ScreenWidth / 2.0f;
+		score.x = ScreenWidth / 2.0f;
 
-		// best to 3 system
+		if (SDL_HasRectIntersectionFloat (&player_one ,&ball))
+		{
+			velX *= -1;
+		}
 
+		if (SDL_HasRectIntersectionFloat(&player_two, &ball))
+		{
+			velX *= -1;
+		}
+
+		// Ball respawning and point system
+
+		if (ball.x > ScreenWidth) 
+		{
+			ball.x = ScreenWidth / 2.0f - BallDim / 2.0f;
+			ball.y = ScreenHeight / 2.0f - BallDim / 2.0f;
+
+			velX *= -1;
+
+			std::cout << "1 Point to Red\n";
+		}
+
+		if (ball.x < 0)
+		{
+			ball.x = ScreenWidth / 2.0f - BallDim / 2.0f;
+			ball.y = ScreenHeight / 2.0f - BallDim / 2.0f;
+
+			velX *= -1;
+
+			std::cout << "1 Point to Blue\n";
+		}
 
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
 		SDL_RenderFillRect(renderer, &player_one);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
 		SDL_RenderFillRect(renderer, &player_two);
 
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
