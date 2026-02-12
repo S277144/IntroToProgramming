@@ -178,11 +178,6 @@ int main()
 
 		//Checking if ball and paddles are overlapping
 
-		SDL_FRect score;
-
-		score.y = ScreenWidth / 2.0f;
-		score.x = ScreenWidth / 2.0f;
-
 		if (ball.y <= 0 || ball.y + BallDim >= PlayArea)
 		{
 			velY *= -1;
