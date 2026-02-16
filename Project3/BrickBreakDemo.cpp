@@ -1,11 +1,10 @@
 #include <iostream>
-
 #include <SDL3\SDL.h>
 
 int main()
 {
 	constexpr int ScreenWidth = 1100;
-	constexpr int ScreenHeight = 1300;
+	constexpr int ScreenHeight = 1400;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -33,7 +32,7 @@ int main()
 
 	bool running{ true };
 
-	const float PadWidth{ 1000.f };
+	const float PadWidth{ 150.f };
 	const float PadHeight{ 15.f };
 
 	const float PlayerOneX = 10.0f;
@@ -46,7 +45,7 @@ int main()
 	const float BallDim{ 12.5f };
 	const float BallX = { ScreenWidth / 2.0f - BallDim / 2.0f };
 	const float BallY = { ScreenHeight / 2.0f - BallDim / 2.0f };
-	const float Ballspeed{ 0.11f };
+	const float Ballspeed{ 0.05f };
 
 	SDL_FRect ball{ BallX, BallY, BallDim, BallDim };
 
@@ -59,6 +58,16 @@ int main()
 
 	bool isAPressed{ false };
 	bool isDPressed{ false };
+
+	constexpr int BlockColumns{ 10 };
+	constexpr int BlockRows{ 4 };
+	constexpr float BlockGap{ 10.0f };
+
+	constexpr float BlockAreaWidth = ScreenWidth - BlockGap;
+	constexpr float BlockAreaHeight = ScreenHeight / 3.0f;
+
+	constexpr float BlockWidth = (BlockAreaWidth - BlockGap * BlockColumns) / BlockColumns;
+	constexpr float BlockHeight = BlockAreaHeight / BlockRows;
 
 	while (running)
 	{
@@ -142,7 +151,51 @@ int main()
 
 			//Blocks spawning and functionality
 
+			SDL_FRect blockRect{BlockGap, BlockGap, BlockWidth, BlockHeight};
+			SDL_FRect blocks [BlockRows * BlockColumns];
 
+			bool destroy_blocks [BlockRows * BlockColumns];
+
+			for (int y = 0; y < BlockRows; y++)
+			{
+				for (int x = 0; x < BlockColumns; x++)
+				{
+					int index = y + x * BlockRows;
+					destroy_blocks[index] = false;
+
+					blocks[index].x = BlockGap + x + (BlockWidth + BlockGap);
+					blocks[index].y = BlockGap + y + (BlockHeight + BlockGap);
+
+					blocks[index].w = BlockWidth;
+					blocks[index].h = BlockHeight;
+				}
+			}
+			/*
+			player.chechAgainstBounds();
+
+			ball.rect.x += ball.vel_x;
+			ball.rect.y += ball.vel_y;
+			*/
+
+
+			for (int y = 0; y < BlockRows; y++)
+			{
+				for (int x = 0; x < BlockColumns; x++)
+				{
+					int index = y + x * BlockRows;
+					
+					if (!destroy_blocks[index] && SDL_HasRectIntersectionFloat(&ball, &blocks[index]))
+					{
+						destroy_blocks[index] = true;
+						if (ball.x < blocks[index].x || ball.x > blocks[index].x + BlockWidth)
+						{
+							velX *= -1;
+
+							velY *= -1;
+						}
+					}
+				}
+			}
 
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 			SDL_RenderClear(renderer);
@@ -153,9 +206,8 @@ int main()
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 			SDL_RenderFillRect(renderer, &ball);
 
-			SDL_FRect block{ 10, 10.0f, 105.0f, 100.0f }; //10 by 4
 			SDL_SetRenderDrawColor(renderer, 222, 88, 61, 255);
-			SDL_RenderFillRect(renderer, &block);
+			SDL_RenderFillRect(renderer, &blockRect);
 
 			SDL_RenderPresent(renderer);
 
