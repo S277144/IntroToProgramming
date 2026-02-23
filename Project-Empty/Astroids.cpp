@@ -2,12 +2,12 @@
 #include <vector>
 #include <SDL3\SDL.h>
 
-#include "player.h"
+#include "gameobject.h"
 
 int main()
 {
-	constexpr int ScreenWidth = 1000;
-	constexpr int ScreenHeight = 1000;
+	constexpr int ScreenWidth = 1400;
+	constexpr int ScreenHeight = 1400;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -31,34 +31,37 @@ int main()
 		return -1;
 	}
 
+	// Declairs
+
 	bool running{ true };
 
-	const float PadWidth{ 50.f };
-	const float PadHeight{ 50.f };
+	const float PadWidth{ 20.f };
+	const float PadHeight{ 20.f };
 
 	const float PlayerOneX = 10.0f;
 	const float PlayerOneY = 10.0f;
 
 	const float PlayerY = ScreenWidth / 2.0f - PadHeight / 2.0f;
 	const float PlayerX = ScreenWidth / 2.0f - PadHeight / 2.0f;
-	const float PlayerSpeed{ 0.08f };
+	const float PlayerSpeed{ 0.15f };
 
 	SDL_FRect player_one{ PlayerOneX, PlayerOneY, PadWidth, PadHeight };
 
-	const float BallDim{ 12.5f };
-	const float BallX = { ScreenWidth / 2.0f - BallDim / 2.0f };
-	const float BallY = { ScreenHeight / 2.0f - BallDim / 2.0f };
-	const float Ballspeed{ 0.05f };
+	const float BullDim{ 12.5f };
+	const float BullX = { ScreenWidth / 2.0f - BullDim / 2.0f };
+	const float BullY = { ScreenHeight / 2.0f - BullDim / 2.0f };
+	const float Bullspeed{ 0.05f };
 
-	SDL_FRect ball{ BallX, BallY, BallDim, BallDim };
+	SDL_FRect bullet{ BullX, BullY, BullDim, BullDim };
+	SDL_FRect astroid{};
 
 	float POneX = PlayerX;
 	float POneY = PlayerY;
-	float ballX = BallX;
-	float ballY = BallY;
+	float bullX = BullX;
+	float bullY = BullY;
 
-	float velX = Ballspeed;
-	float velY = Ballspeed;;
+	float velX = Bullspeed;
+	float velY = Bullspeed;;
 
 	bool isWPressed{ false };
 	bool isAPressed{ false };
@@ -77,8 +80,7 @@ int main()
 
 	while (running)
 	{
-
-		std::vector<float> stuff{};
+		// Player movement
 
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
@@ -109,25 +111,29 @@ int main()
 
 		if (isWPressed)
 		{
+			//POneY -= PlayerSpeed;
 
-			POneY -= PlayerSpeed;
+
 		}
 
 		if (isAPressed)
 		{
-			POneX -= PlayerSpeed;
+			//POneX -= PlayerSpeed;
+
 
 		}
 
 		if (isSPressed)
 		{
+			//POneY += PlayerSpeed;
 
-			POneY += PlayerSpeed;
+
 		}
 
 		if (isDPressed)
 		{
-			POneX += PlayerSpeed;
+			//POneX += PlayerSpeed;
+
 
 		}
 
@@ -154,14 +160,21 @@ int main()
 		player_one.x = POneX;
 		player_one.y = POneY;
 
+		// Shooting mechanic
+
+
+
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 43, 250, 140, 255);
+		SDL_SetRenderDrawColor(renderer, 99, 156, 99, 255);
 		SDL_RenderFillRect(renderer, &player_one);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderFillRect(renderer, &ball);
+		SDL_SetRenderDrawColor(renderer, 126, 209, 240, 255);
+		SDL_RenderFillRect(renderer, &bullet);
+
+		SDL_SetRenderDrawColor(renderer, 110, 75, 54, 255);
+		SDL_RenderFillRect(renderer, &astroid);
 
 		SDL_RenderPresent(renderer);
 	}
