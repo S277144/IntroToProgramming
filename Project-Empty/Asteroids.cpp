@@ -2,12 +2,14 @@
 #include <vector>
 #include <SDL3\SDL.h>
 
-#include "gameobject.h"
+#include "Game.h"
+#include "Gameobject.h"
+#include "Namespace.h"
 
 int main()
 {
-	constexpr int ScreenWidth = 1400;
-	constexpr int ScreenHeight = 1400;
+	constexpr int ScreenWidth = 1350;
+	constexpr int ScreenHeight = 1350;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -36,16 +38,16 @@ int main()
 	bool running{ true };
 
 	const float PadWidth{ 20.f };
-	const float PadHeight{ 20.f };
+	const float PadHeight{ 30.f };
 
-	const float PlayerOneX = 10.0f;
-	const float PlayerOneY = 10.0f;
+	const float PlayerX = 10.0f;
+	const float PlayerY = 10.0f;
 
-	const float PlayerY = ScreenWidth / 2.0f - PadHeight / 2.0f;
-	const float PlayerX = ScreenWidth / 2.0f - PadHeight / 2.0f;
+	const float Player_OneY = ScreenWidth / 2.0f - PadHeight / 2.0f;
+	const float Player_OneX = ScreenWidth / 2.0f - PadHeight / 2.0f;
 	const float PlayerSpeed{ 0.15f };
 
-	SDL_FRect player_one{ PlayerOneX, PlayerOneY, PadWidth, PadHeight };
+	SDL_FRect player_one{ Player_OneX, Player_OneY, PadWidth, PadHeight };
 
 	const float BullDim{ 12.5f };
 	const float BullX = { ScreenWidth / 2.0f - BullDim / 2.0f };
@@ -55,13 +57,13 @@ int main()
 	SDL_FRect bullet{ BullX, BullY, BullDim, BullDim };
 	SDL_FRect astroid{};
 
-	float POneX = PlayerX;
-	float POneY = PlayerY;
+	float POneX = Player_OneX;
+	float POneY = Player_OneY;
 	float bullX = BullX;
 	float bullY = BullY;
 
 	float velX = Bullspeed;
-	float velY = Bullspeed;;
+	float velY = Bullspeed;
 
 	bool isWPressed{ false };
 	bool isAPressed{ false };
@@ -109,33 +111,7 @@ int main()
 			}
 		}
 
-		if (isWPressed)
-		{
-			//POneY -= PlayerSpeed;
 
-
-		}
-
-		if (isAPressed)
-		{
-			//POneX -= PlayerSpeed;
-
-
-		}
-
-		if (isSPressed)
-		{
-			//POneY += PlayerSpeed;
-
-
-		}
-
-		if (isDPressed)
-		{
-			//POneX += PlayerSpeed;
-
-
-		}
 
 		if (POneX > ScreenWidth)
 		{
@@ -159,6 +135,34 @@ int main()
 
 		player_one.x = POneX;
 		player_one.y = POneY;
+
+		if (isWPressed)
+		{
+			POneY -= PlayerSpeed;
+			//player = Gameobject::_position;
+			//POneY = Gameobject::getY;
+		}
+
+		if (isAPressed)
+		{
+			POneX -= PlayerSpeed;
+
+
+		}
+
+		if (isSPressed)
+		{
+			POneY += PlayerSpeed;
+
+
+		}
+
+		if (isDPressed)
+		{
+			POneX += PlayerSpeed;
+
+
+		}
 
 		// Shooting mechanic
 
