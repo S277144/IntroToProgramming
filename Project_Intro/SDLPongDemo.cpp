@@ -6,12 +6,22 @@
 
 struct Paddle
 {
+	Paddle(float y, SDL_FRect rect) : y{ y }, rect{ rect } {}
 	float y;
 	SDL_FRect rect;
 
+	void AddOneToScore()
+	{
+		score++;
+	}
+
+	uint8_t getScore()
+	{
+		return score;
+	}
 
 private:
-	uint8_t score;
+	uint8_t score{ 0 };
 };
 
 class Ball
@@ -66,8 +76,8 @@ int main()
 	const float PlayerY = ScreenHeight / 2.0f - PadHeight / 2.0f;
 	const float PlayerSpeed{ 0.08f };
 
-	SDL_FRect player_one{ PlayerOneX, PlayerY, PadWidth, PadHeight };
-	SDL_FRect player_two{ PlayerTwoX, PlayerY, PadWidth, PadHeight };
+	Paddle player_one{ PlayerY, {PlayerOneX, PlayerY, PadWidth, PadHeight } };
+	Paddle player_two{ PlayerY, {PlayerTwoX, PlayerY, PadWidth, PadHeight } };
 
 	const float BallDim{ 12.5f };
 	const float BallX = { ScreenWidth / 2.0f - BallDim / 2.0f };
@@ -90,10 +100,10 @@ int main()
 	bool isLPressed{ false };
 
 	const int MaxScore { 5 };
-	constexpr float TallyWidth { 10.0f };
-	constexpr float TallyGap { 10.0f };
-	constexpr float TallyOneStartX { 20.0f };
-	constexpr float TallyTwoStartX { ScreenWidth - (MaxScore * (TallyWidth + TallyGap))};
+	//constexpr float TallyWidth { 10.0f };
+	//constexpr float TallyGap { 10.0f };
+	//constexpr float TallyOneStartX { ScreenHeight - 150.0f};
+	//constexpr float TallyTwoStartX { ScreenWidth - (MaxScore * (TallyWidth + TallyGap))};
 
 	while (running)
 	{
@@ -131,11 +141,11 @@ int main()
 
 		if (isWPressed)
 		{
-			POneY -= PlayerSpeed;
+			player_one.y -= PlayerSpeed;
 		}
 		if (isSPressed)
 		{
-			POneY += PlayerSpeed;
+			player_one.y += PlayerSpeed;
 		}
 
 		if (isOPressed)
@@ -146,24 +156,26 @@ int main()
 		{
 			PTwoY += PlayerSpeed;
 		}
-	
-
-		player_one.y = POneY;
-		player_two.y = PTwoY;
+		
+		if (ball.y > 0)
+		{
+			//PTwoY = ball.y;
+			//POneY = ball.y;
+		}
 
 		ball.x += velX;
 		ball.y += velY;
 
 		//Stops the paddles from leaving map
 
-		if (POneY < 0)
+		if (player_one.y < 0)
 		{
-			POneY= 0;
+			player_one.y = 0;
 		}
 
-		if (POneY > PlayArea - PadHeight)
+		if (player_one.y > PlayArea - PadHeight)
 		{
-			POneY = PlayArea - PadHeight;
+			player_one.y = PlayArea - PadHeight;
 		}
 
 		if (PTwoY < 0)
@@ -176,6 +188,9 @@ int main()
 			PTwoY = PlayArea - PadHeight;
 		}
 
+		player_one.rect.y = player_one.y;
+		player_two.rect.y = PTwoY;
+
 		//Checking if ball and paddles are overlapping
 
 		if (ball.y <= 0 || ball.y + BallDim >= PlayArea)
@@ -183,17 +198,65 @@ int main()
 			velY *= -1;
 		}
 				
-		if (SDL_HasRectIntersectionFloat (&player_one ,&ball))
+		if (SDL_HasRectIntersectionFloat (&player_one.rect ,&ball))
 		{
 			velX *= -1;
 		}
 
-		if (SDL_HasRectIntersectionFloat(&player_two, &ball))
+		if (SDL_HasRectIntersectionFloat(&player_two.rect, &ball))
 		{
 			velX *= -1;
 		}
 
-		// Ball respawning and point system
+		// Ball speed up
+
+		if (SDL_HasRectIntersectionFloat(&player_two.rect, &ball))
+		{
+			velX *= 1.2f;
+
+			std::cout << velX << "\n";
+
+			if (velX >= 5.0f)
+			{
+				velX = 5.0f;
+			}
+		}
+
+		if (SDL_HasRectIntersectionFloat(&player_one.rect, &ball))
+		{
+			velX *= 1.1f;
+
+			std::cout << velX << "\n";
+
+			if (velX >= 4.0f)
+			{
+				velX = 5.0f;
+			}
+		}
+
+		// Ball Spin mechanic
+
+		if (SDL_HasRectIntersectionFloat(&player_one.rect, &ball) && PadHeight > (PadHeight - 50))
+		{
+			velY = Ballspeed;
+		}
+
+		if (SDL_HasRectIntersectionFloat(&player_one.rect, &ball) && (PadHeight - 50))
+		{
+			velY = -Ballspeed;
+		}
+		
+		if (SDL_HasRectIntersectionFloat(&player_two.rect, &ball) && PadHeight > (PadHeight - 50))
+		{
+			velY = Ballspeed;
+		}
+
+		if (SDL_HasRectIntersectionFloat(&player_two.rect, &ball) && (PadHeight - 50))
+		{
+			velY = -Ballspeed;
+		}
+
+		// Ball respawning
 
 		if (ball.x > ScreenWidth) 
 		{
@@ -202,7 +265,11 @@ int main()
 
 			velX *= -1;
 
+			player_one.AddOneToScore();
+
 			std::cout << "1 Point to Red\n";
+
+			velX = -Ballspeed;
 		}
 
 		if (ball.x < 0)
@@ -212,10 +279,12 @@ int main()
 
 			velX *= -1;
 
+			player_two.AddOneToScore();
+
 			std::cout << "1 Point to Blue\n";
+
+			velX = Ballspeed;
 		}
-
-
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
@@ -224,26 +293,48 @@ int main()
 		SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
 		SDL_RenderFillRect(renderer, &border);
 
-		SDL_FRect goal{ 715.0f, PlayArea, 100.0f, 150.0f };
-		SDL_SetRenderDrawColor(renderer, 242, 198, 52, 255);
-		SDL_RenderFillRect(renderer, &goal);
+		float p2ScoreX = 1400;
+		for (int i = 0; i < player_two.getScore(); i++) {
+			SDL_FRect pointtwo{ p2ScoreX, ScreenHeight - 150.0f, 20.0f, ScreenHeight - PlayArea };
+			SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
+			SDL_RenderFillRect(renderer, &pointtwo);
+			p2ScoreX -= 40.0f;
+		}
+
+		float p1ScoreX = 100;
+		for (int i = 0; i < player_one.getScore(); i++) {
+			SDL_FRect pointone{ p1ScoreX, ScreenHeight - 150.0f, 20.0f, ScreenHeight - PlayArea };
+			SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
+			SDL_RenderFillRect(renderer, &pointone);
+			p1ScoreX += 40.0f;
+		}
 
 		SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
-		SDL_RenderFillRect(renderer, &player_one);
-
-		SDL_FRect pointone{ 0, ScreenHeight - 150.0f, 200.0f, ScreenHeight - PlayArea };
-		SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
-		SDL_RenderFillRect(renderer, &pointone);
+		SDL_RenderFillRect(renderer, &player_one.rect);
 
 		SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
-		SDL_RenderFillRect(renderer, &player_two);
-
-		SDL_FRect pointtwo{ 1300, ScreenHeight - 150.0f, 200.0f, ScreenHeight - PlayArea };
-		SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
-		SDL_RenderFillRect(renderer, &pointtwo);
+		SDL_RenderFillRect(renderer, &player_two.rect);
 
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderFillRect(renderer, &ball);
+
+		if (player_one.getScore() == 5)
+		{
+			SDL_FRect EndP1{ 0, 0, ScreenWidth, PlayArea };
+			SDL_SetRenderDrawColor(renderer, 255, 82, 82, 255);
+			SDL_RenderFillRect(renderer, &EndP1);
+
+			velX = 0;
+		}
+
+		if (player_two.getScore() == 5)
+		{
+			SDL_FRect EndP2{ 0, 0, ScreenWidth, PlayArea };
+			SDL_SetRenderDrawColor(renderer, 137, 255, 255, 255);
+			SDL_RenderFillRect(renderer, &EndP2);
+
+			velX = 0;
+		}
 
 		SDL_RenderPresent(renderer);
 	}
@@ -255,3 +346,5 @@ int main()
 	return 0;
 }
 
+// vc files + add to linker >> input in properties
+// 
