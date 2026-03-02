@@ -159,7 +159,7 @@ int main()
 		
 		if (ball.y > 0)
 		{
-			//PTwoY = ball.y;
+			PTwoY = ball.y;
 			//POneY = ball.y;
 		}
 
