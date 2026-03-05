@@ -3,6 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="Project-4th-Game/Project-4th-Game.vcxproj" Id="91ea8a09-e0e5-427a-8175-3d6fd2a6be03" />
   <Project Path="Project-Empty/Project-Empty.vcxproj" Id="1a672c6d-a5e4-4021-abd5-9f3c4bc25d8a" />
   <Project Path="Project2/Project2.vcxproj" Id="de646b63-da4a-42b1-aeea-23771f4a8fe6" />
   <Project Path="Project3/Project3.vcxproj" Id="6019b8fb-7645-4277-8e93-0961d3a5391a" />
