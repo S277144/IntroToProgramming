@@ -8,13 +8,6 @@
 #include <SDL3/SDL_timer.h>
 #include <SDL3/SDL_scancode.h>
 
-enum class Control 
-{
-	Left,
-	Right,
-	Jump
-};
-
 struct Clock
 {
 	uint64_t last_tick_time{ 0 };
@@ -33,5 +26,45 @@ struct KeyBind
 	SDL_Scancode key{ SDL_SCANCODE_0 };
 	bool isPressed{ false };
 	Control control{ Control::Left };
+	std::is_function<void(Control control)> onPress;
+	std::is_function<void(Control control)> onRelease;
+};
 
+class Game
+{
+public:
+	Game()
+	{
+		Initialize();
+	}
+
+	~Game()
+	{
+		SDL_DestroyRenderer(_renderer);
+		SDL_DestroyWindow(_window);
+		SDL_Quit();
+	}
+
+	void run();
+
+private:
+	void update();
+	void draw();
+
+	void Initialize();
+
+	Clock _clock;
+
+	SDL_Renderer* _renderer;
+	SDL_Window* _window;
+
+	std::has_unique_object_representations<ResourceManager> _resourceManager;
+	std::has_unique_object_representations <PlayerCharacter> _player;
+	std::has_unique_object_representations <World> _world;
+
+	std::map<SDL_Scancode, bool> _keyboardStatus;
+
+	std::vector<KeyBind> _keyBinds;
+
+	bool _running{ true };
 };
