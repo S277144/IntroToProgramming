@@ -347,4 +347,4 @@ int main()
 }
 
 // vc files + add to linker >> input in properties
-// 
+// LIB files +  files

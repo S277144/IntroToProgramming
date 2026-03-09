@@ -140,7 +140,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Empty.cpp" />
+    <ClCompile Include="Animated_Object.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Game_Object.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MyAttempt.cpp" />
+    <ClCompile Include="Player_Character.cpp" />
+    <ClCompile Include="Resource_Manager.cpp" />
+    <ClCompile Include="World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animated_Object.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Game_Object.h" />
+    <ClInclude Include="Player_Character.h" />
+    <ClInclude Include="Resource_Manager.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
