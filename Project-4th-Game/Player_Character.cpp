@@ -33,17 +33,19 @@ void PlayerCharacter::onReleased(Control control)
 void PlayerCharacter::moveLeft()
 {
 	_direction = Direction::Left;
-	_velocity.x = -50;
+	_velocity.x = -150;
 }
 
 void PlayerCharacter::moveRight()
 {
 	_direction = Direction::Right;
-	_velocity.x = 50;
+	_velocity.x = 150;
 }
 
 void PlayerCharacter::Jump()
 {
-	if (_velocity.y >= 0.0f)
-		_velocity.x = -100;
+	//if (_velocity.y >= 0.0f);
+		//_velocity.x = -100;
+
+	_velocity.y = -150;
 }

@@ -30,11 +30,11 @@ public:
 	{
 		loadLevelFile("assets\\levels\\1.txt");
 
-		_worldTexture = _resourceManager->getTexture("world");
+		_worldTexture = _resourceManager->getTexture("World");
 
-		_tileRectMap[TileType::LeftGround] = SDL_FRect{ 12.0f * 65.0f, 9.0f * 65.0f, 64.0f, 64.0f};
-		_tileRectMap[TileType::MidGround] = SDL_FRect{ 11.0f * 65.0f, 9.0f * 65.0f, 64.0f, 64.0f };
-		_tileRectMap[TileType::RightGround] = SDL_FRect{ 13.0f * 65.0f, 9.0f * 65.0f, 64.0f, 64.0f };
+		_tileRectMap[TileType::LeftGround] = SDL_FRect{ 4.0f * 65.0f, 11.0f * 65.0f, 64.0f, 64.0f};
+		_tileRectMap[TileType::MidGround] = SDL_FRect{ 3.0f * 65.0f, 11.0f * 65.0f, 64.0f, 64.0f };
+		_tileRectMap[TileType::RightGround] = SDL_FRect{ 5.0f * 65.0f, 11.0f * 65.0f, 64.0f, 64.0f };
 	}
 
 	void draw(SDL_Renderer* renderer);

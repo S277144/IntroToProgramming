@@ -16,6 +16,8 @@ public:
 	void makestatic() { _static = true; }
 	bool isStatic() const { return _static; }
 
+	void alterPosition(float x, float y);
+
 	virtual void update(float dt);
 	virtual void draw(SDL_Renderer* renderer);
 

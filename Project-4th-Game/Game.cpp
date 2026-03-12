@@ -19,22 +19,19 @@ void Game::Initialize()
 
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window* window(nullptr);
-	SDL_Renderer* renderer(nullptr);
-
 	SDL_CreateWindowAndRenderer(Config::ProjectName.c_str(), Config::ScreenWidth, Config::ScreenHeight, 0, &_window, &_renderer);
 
-	if (window == nullptr)
+	if (_window == nullptr)
 	{
-		std::cerr << "Failed to initialize SDL window\n";
+		std::cerr << "Failed to initialize SDL window: " << SDL_GetError() << "\n";
 		SDL_Quit();
 		return;
 	}
 
-	if (renderer == nullptr)
+	if (_renderer == nullptr)
 	{
 		std::cerr << "Failed to initialize SDL Renderer\n";
-		SDL_DestroyWindow(window);
+		SDL_DestroyWindow(_window);
 		SDL_Quit;
 		return;
 	}
@@ -66,21 +63,21 @@ void Game::Initialize()
 	_keyBinds.emplace_back
 	(
 		SDL_SCANCODE_A, false, Control::Left,
-		std::bind(&PlayerCharacter::onPressed, _player.get(), std::placeholders::_1),
+		std::bind(&PlayerCharacter::onReleased, _player.get(), std::placeholders::_1),
 		std::bind(&PlayerCharacter::onPressed, _player.get(), std::placeholders::_1)
 	);
 
 	_keyBinds.emplace_back
 	(
 		SDL_SCANCODE_D, false, Control::Right,
-		std::bind(&PlayerCharacter::onPressed, _player.get(), std::placeholders::_1),
+		std::bind(&PlayerCharacter::onReleased, _player.get(), std::placeholders::_1),
 		std::bind(&PlayerCharacter::onPressed, _player.get(), std::placeholders::_1)
 	);
 
 	_keyBinds.emplace_back
 	(
 		SDL_SCANCODE_SPACE, false, Control::Jump,
-		std::bind(&PlayerCharacter::onPressed, _player.get(), std::placeholders::_1),
+		std::bind(&PlayerCharacter::onReleased, _player.get(), std::placeholders::_1),
 		std::bind(&PlayerCharacter::onPressed, _player.get(), std::placeholders::_1)
 	);
 
@@ -134,12 +131,16 @@ void Game::update()
 	float dt = _clock.delta / 1000.0f;
 	_player->update(dt);
 
-	_world->check_collisions(_player->getRect());
+	auto overlap = _world->check_collisions(_player->getRect());
+
+	if (overlap.h > 0.0f) {
+		_player->alterPosition(0.0f, -overlap.h);
+	}
 }
 
 void Game::draw()
 {
-	SDL_SetRenderDrawColor(_renderer, 0, 0, 255, 255);
+	SDL_SetRenderDrawColor(_renderer, 100, 100, 200, 255);
 	SDL_RenderClear(_renderer);
 
 	_world->draw(_renderer);

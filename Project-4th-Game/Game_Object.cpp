@@ -1,10 +1,16 @@
 #include "Game_Object.h"
 
+void GameObject::alterPosition(float x, float y)
+{
+	_position.x += x;
+	_position.y += y;
+}
+
 void GameObject::update(float dt)
 {
 	if (_static) return;
 
-	_velocity.y += 25.0f;
+	_velocity.y += 100.0f * dt;
 
 	_position += _velocity * dt;
 

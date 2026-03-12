@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Animated_object.h"
+#include "World.h"
 
 enum class Control
 {
