@@ -1,9 +1,12 @@
 #pragma once
 
-#include "Player_Character.h";
-#include "Animated_Object.h";
-#include "Resource_Manager.h";
-#include "World.h";
+#include <functional>
+#include <memory>
+
+#include "Player_Character.h"
+#include "Animated_Object.h"
+#include "Resource_Manager.h"
+#include "World.h"
 #include <cstdint>
 #include <SDL3/SDL_timer.h>
 #include <SDL3/SDL_scancode.h>
@@ -26,8 +29,8 @@ struct KeyBind
 	SDL_Scancode key{ SDL_SCANCODE_0 };
 	bool isPressed{ false };
 	Control control{ Control::Left };
-	std::is_function<void(Control control)> onPress;
-	std::is_function<void(Control control)> onRelease;
+	std::function<void(Control control)> onPress;
+	std::function<void(Control control)> onRelease;
 };
 
 class Game
@@ -58,9 +61,9 @@ private:
 	SDL_Renderer* _renderer;
 	SDL_Window* _window;
 
-	std::has_unique_object_representations<ResourceManager> _resourceManager;
-	std::has_unique_object_representations <PlayerCharacter> _player;
-	std::has_unique_object_representations <World> _world;
+	std::unique_ptr<ResourceManager> _resourceManager;
+	std::unique_ptr<PlayerCharacter> _player;
+	std::unique_ptr<World> _world;
 
 	std::map<SDL_Scancode, bool> _keyboardStatus;
 

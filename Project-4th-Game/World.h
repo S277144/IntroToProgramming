@@ -10,7 +10,7 @@
 
 enum class TileType
 {
-	sky,
+	Sky,
 	LeftGround,
 	MidGround,
 	RightGround
@@ -26,8 +26,10 @@ struct Tile
 class World
 {
 public:
-	World(ResourceManager* resMan) : _resourceManager{ resMan }
+	World(ResourceManager* resMan) : _resourceManager{ resMan } 
 	{
+		loadLevelFile("assets\\levels\\1.txt");
+
 		_worldTexture = _resourceManager->getTexture("world");
 
 		_tileRectMap[TileType::LeftGround] = SDL_FRect{ 12.0f * 65.0f, 9.0f * 65.0f, 64.0f, 64.0f};
@@ -41,10 +43,10 @@ public:
 
 private:
 
-	void loadlevelFile(const std::string& path);
+	void loadLevelFile(const std::string& path);
 
 	std::vector<Tile> _worldTiles;
-	ResouceManager* _resourceManager;
+	ResourceManager* _resourceManager;
 	SDL_Texture* _worldTexture;
-	std::map<TileType, SDL_FRect> _tileRectMap
+	std::map<TileType, SDL_FRect> _tileRectMap;
 };
