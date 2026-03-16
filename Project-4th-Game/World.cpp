@@ -27,7 +27,7 @@ SDL_FRect World::check_collisions(const SDL_FRect & dynamic)
 			auto tileRect = SDL_FRect{ tile.x * Config::TileWidth, tile.y * Config::TileHeight, Config::TileWidth, Config::TileHeight };
 
 			if (SDL_GetRectIntersectionFloat(&dynamic, &tileRect, &overlap_rect))
-				break;
+			break;
 		}
 	}
 
