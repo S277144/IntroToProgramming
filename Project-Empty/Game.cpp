@@ -280,14 +280,14 @@ void Game::update()
 	}
 }
 
-//void Game::drawUI()
-//{
-//	SDL_FRect scoreRect{ 10.0f, 10.0f, _staticText["score"]->w, _staticText["score"]->h };
-//	SDL_RenderTexture(Renderer, _staticText["score"], NULL, &scoreRect);
-//
-//	SDL_FRect liveRect{ Config::ScrenWidth - 110 - _staticText["lives"]->w, 10.0f, _staticText["lives"]->w, _staticText["lives"]->h };
-//	SDL_RenderTexture(Renderer, _staticText["lives"], NULL, &liveRect);
-//}
+void Game::drawUI()
+{
+	SDL_FRect scoreRect{ 10.0f, 10.0f, _staticText["score"]->w, _staticText["score"]->h };
+	SDL_RenderTexture(Renderer, _staticText["score"], NULL, &scoreRect);
+
+	SDL_FRect liveRect{ Config::ScrenWidth - 110 - _staticText["lives"]->w, 10.0f, _staticText["lives"]->w, _staticText["lives"]->h };
+	SDL_RenderTexture(Renderer, _staticText["lives"], NULL, &liveRect);
+}
 
 void Game::draw()
 {
@@ -305,7 +305,7 @@ void Game::draw()
 		bullet->draw(Renderer);
 	}
 
-	//drawUI();
+	drawUI();
 
 	SDL_RenderPresent(Renderer);
 }
