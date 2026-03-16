@@ -22,7 +22,7 @@ public:
 	void startAccelerating() { _isAccelerating = true; }
 	void stopAccelerating() { _isAccelerating = false; }
 
-	void canFire() const { return _canFire; }
+	bool canFire() const { return _canFire; }
 	void allowFire() { _canFire = true; }
 	void fire() { _canFire = false; }
 

@@ -2,7 +2,7 @@
 #include "Util.h"
 #include "Config.h"
 
-Asteroid::Asteroid(Size sz) : GameObject(0.0f, 0.0f, 0.0f, sz == Size::Large ? Config::LargeAsteroidRadius : Config::AsteroidRadius), 
+Asteroid::Asteroid(Size sz) : GameObject(0.0f, 0.0f, 0.0f, sz == Size::Large ? Config::LargeAsteroidRadius : Config::SmallAsteroidRadius), 
 _Size{sz}
 {
 	_Position.x = util::getRandom(1.0f, Config::ScreenWidth);
@@ -10,7 +10,7 @@ _Size{sz}
 	randomiseVelocity();
 }
 
-Asteroid::Asteroid(const Vector2& pos, Size sz) : GameObject(pos.x, pos.y, 0.0f, sz == Size::Large ? Config::LargeAsteroidRadius : Config::AsteroidRadius),
+Asteroid::Asteroid(const Vector2& pos, Size sz) : GameObject(pos.x, pos.y, 0.0f, sz == Size::Large ? Config::LargeAsteroidRadius : Config::SmallAsteroidRadius),
 _Size{ sz }
 {
 	randomiseVelocity();

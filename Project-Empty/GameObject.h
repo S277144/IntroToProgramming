@@ -1,11 +1,13 @@
 #pragma once
 
 #include "vector2.h"
+#include <SDL3/SDL.h>
+#include <string>
 
-class Gameobject
+class GameObject
 {
 public:
-	Gameobject(float x, float y, float ang, float radius) : _Position{ x ,y }, _Angle{ ang }, _Radius{ radius }, _Texture{ nullptr } {}
+	GameObject(float x, float y, float ang, float radius) : _Position{ x ,y }, _Angle{ ang }, _Radius{ radius }, _Texture{ nullptr } {}
 
 	~GameObject()
 	{
@@ -13,7 +15,7 @@ public:
 			SDL_DestroyTexture(_Texture);
 	}
 
-	void loadTuxture(SDL_Renderer* Renderer, const std::string& path);
+	void loadTexture(SDL_Renderer* Renderer, const std::string& path);
 	void setTexture(SDL_Texture* Texture);
 	void draw(SDL_Renderer* Renderer);
 	virtual void update();

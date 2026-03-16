@@ -15,7 +15,7 @@
 class Game
 {
 public:
-	Game() : _ship{ Config::HalfScreenWidth, Config::HalfScreenHeight }
+	Game() : _Ship{ Config::HalfScreenWidth, Config::HalfScreenHeight }
 	{
 		initialize();
 	}
@@ -43,7 +43,7 @@ private:
 	void drawUI();
 
 	SDL_Window* window{ nullptr };
-	SDL_Renderer* renderer{ nullptr };
+	SDL_Renderer* Renderer{ nullptr };
 
 	MIX_Mixer* mixer;
 	MIX_Track* shotTrack;

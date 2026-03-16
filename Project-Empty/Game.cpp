@@ -2,11 +2,12 @@
 #include <string>
 #include <format>
 
+
 #include "Game.h"
 #include "Config.h"
 #include "Strings.h"
 
-void Game::game
+void Game::run()
 {
 	while (running)
 	{
@@ -17,7 +18,7 @@ void Game::game
 
 void Game::initialize()
 {
-	running = false
+	running = false;
 
 		SDL_Init(SDL_INIT_VIDEO);
 
@@ -65,7 +66,7 @@ void Game::initialize()
 
 	for (int i = 0; i < 5; i++)
 	{
-		_Asteroids.emplace_back(std::make_unique<Asteroids>(Size::Large)):
+		_Asteroids.emplace_back(std::make_unique<Asteroid>(Size::Large));
 	}
 
 	for (auto& asteroid : _Asteroids)
@@ -240,7 +241,7 @@ void Game::update()
 		if (bullet->shouldRemove()) continue;
 
 
-		for (auto& asteroid : _asteroids)
+		for (auto& asteroid : _Asteroids)
 		{
 			if (asteroid->shouldRemove()) continue;
 			auto bulletPos = Bullet->getPosition();
@@ -263,7 +264,7 @@ void Game::update()
 		}
 	}
 
-	for (aut& asteroid : destroyedAsteroids)
+	for (auto& asteroid : destroyedAsteroids)
 	{
 		auto& one = _Asteroids.emolace_back(std::make_unique<Asteroid>(asteroid->getPosition(), Size::Small));
 		one->loadTexture(Renderer, "Assets\\Meteor_DSmall.png");
@@ -272,7 +273,7 @@ void Game::update()
 	}
 
 	std::erase_if(_Bullets, [](const std::unique_ptr<Bullet>& b) {return b->shouldRemove(); });
-	std::erase_if(_Asteroids, [](const std::unique_ptr<Asteroids>& a) {return a->shouldRemove(); });
+	std::erase_if(_Asteroids, [](const std::unique_ptr<Asteroid>& a) {return a->shouldRemove(); });
 
 	if (_Asteroids.empty())
 	{
@@ -285,7 +286,7 @@ void Game::drawUI()
 	SDL_FRect scoreRect{ 10.0f, 10.0f, _staticText["score"]->w, _staticText["score"]->h };
 	SDL_RenderTexture(Renderer, _staticText["score"], NULL, &scoreRect);
 
-	SDL_FRect liveRect{ Config::ScrenWidth - 110 - _staticText["lives"]->w, 10.0f, _staticText["lives"]->w, _staticText["lives"]->h };
+	SDL_FRect liveRect{ Config::ScreenWidth - 110 - _staticText["lives"]->w, 10.0f, _staticText["lives"]->w, _staticText["lives"]->h };
 	SDL_RenderTexture(Renderer, _staticText["lives"], NULL, &liveRect);
 }
 
@@ -297,10 +298,10 @@ void Game::draw()
 	_Ship.draw(Renderer);
 	for (auto& asteroid : _Asteroids)
 	{
-		asteroid->draw(renderer);
+		asteroid->draw(Renderer);
 	}
 
-	for (auto& bullet : _Bullets)
+	for (auto& bullet : _Bullets);
 	{
 		bullet->draw(Renderer);
 	}

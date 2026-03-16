@@ -3,18 +3,19 @@
 
 #include "Config.h"
 #include "GameObject.h"
+#include "Game.h"
 
 void GameObject::loadTexture(SDL_Renderer* Renderer, const std::string& Path)
 {
-	auto Surface = SDL_LoadPNG(path.c_str());
+	auto Surface = SDL_LoadPNG(Path.c_str());
 	if (!Surface)
 	{
-		std::cerr << "Failed to load PNG: " << path << " - " << SDL_GetError() << '\n';
+		std::cerr << "Failed to load PNG: " << Path << " - " << SDL_GetError() << '\n';
 		return;
 	}
 
-	_Texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_DestroySurface(surface);
+	_Texture = SDL_CreateTextureFromSurface(Renderer, Surface);
+	SDL_DestroySurface(Surface);
 }
 
 void GameObject::setTexture(SDL_Texture* Texture)
@@ -36,7 +37,7 @@ void GameObject::draw(SDL_Renderer* Renderer)
 			.x = _Position.x - _Texture->w / 2.0f,
 			.y = _Position.y - _Texture->h / 2.0f,
 			.w = static_cast<float>(_Texture->w),
-			.h = static_cast<float>(_taxture->h)
+			.h = static_cast<float>(_Texture->h)
 		};
 
 		float deg = _Angle * 100.0f / std::numbers::pi_v<float>;
@@ -62,7 +63,7 @@ void GameObject::update()
 void GameObject::screenWrap()
 {
 	float width = _Texture ? _Texture->w : _Radius;
-	float height = _Texture ? _Texture->h : _Raduis;
+	float height = _Texture ? _Texture->h : _Radius;
 
 	if (_Position.x + width < 0.0f)
 	{
@@ -70,7 +71,7 @@ void GameObject::screenWrap()
 	}
 	else if (_Position.x > Config::ScreenWidth)
 	{
-		_Postition.x = 0.0f
+		_Position.x = 0.0f;
 	}
 
 	if (_Position.y + height < 0.0f)
@@ -79,6 +80,6 @@ void GameObject::screenWrap()
 	}
 	else if (_Position.y > Config::ScreenHeight)
 	{
-		_Postition.y = 0.0f
+		_Position.y = 0.0f;
 	}
 }

@@ -15,21 +15,21 @@ void Ship::update()
 	if (_Velocity.magnitude() > Config::ShipSpeed)
 	{
 		_Velocity.normalize();
-		_Velocity.Scale(Config::ShipSpeed);
+		_Velocity.scale(Config::ShipSpeed);
 	}
 
-	_Velocity.Scale(0.95f);
+	_Velocity.scale(0.95f);
 
 	GameObject::update();
 }
 
 void Ship::rotate(RotationDir dir)
 {
-	float modifier = dir == RotationDir::Laft ? -1.0f : 1.0f;
+	float modifier = dir == RotationDir::Left ? -1.0f : 1.0f;
 	_Angle += RotationSpeed * modifier;
 
 	if (_Angle < 0.0f)
-		_Angle = 2.0f * std::pi_v<float>;
-	else if (_Angle > 2.0f * std * std::numbers::pi_v<float>)
+		_Angle = 2.0f * std::numbers::pi_v<float>;
+	else if (_Angle > 2.0f * std::numbers::pi_v<float>)
 		_Angle = 0.0f;
 }
