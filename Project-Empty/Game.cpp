@@ -42,7 +42,7 @@ void Game::initialize()
 		return;
 	}
 
-	if (!initialize_mixer()) return;
+	//if (!initialize_mixer()) return;
 
 	if (!initialize_ttf()) return;
 

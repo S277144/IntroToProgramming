@@ -61,6 +61,9 @@ void World::loadLevelFile(const std::string& path)
 		case '3':
 			_worldTiles.emplace_back(x, y, TileType::RightGround);
 			break;
+		case 'E':
+			_worldTiles.emplace_back(x, y, TileType::Enemy);
+			break;
 		case '\n':
 			x = -1;
 			y++;

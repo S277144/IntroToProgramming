@@ -13,7 +13,8 @@ enum class TileType
 	Sky,
 	LeftGround,
 	MidGround,
-	RightGround
+	RightGround,
+	Enemy
 };
 
 struct Tile
@@ -35,6 +36,7 @@ public:
 		_tileRectMap[TileType::LeftGround] = SDL_FRect{ 4.0f * 65.0f, 11.0f * 65.0f, 64.0f, 64.0f};
 		_tileRectMap[TileType::MidGround] = SDL_FRect{ 3.0f * 65.0f, 11.0f * 65.0f, 64.0f, 64.0f };
 		_tileRectMap[TileType::RightGround] = SDL_FRect{ 5.0f * 65.0f, 11.0f * 65.0f, 64.0f, 64.0f };
+		_tileRectMap[TileType::Enemy] = SDL_FRect{ 5.0f * 65.0f, 5.0f * 65.0f, 64.0f, 64.0f };
 	}
 
 	void draw(SDL_Renderer* renderer);

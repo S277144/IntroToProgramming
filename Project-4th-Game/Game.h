@@ -3,7 +3,7 @@
 #include <functional>
 #include <memory>
 
-//#include "Enemy.h"
+#include "Enemy.h"
 #include "Player_Character.h"
 #include "Animated_Object.h"
 #include "Resource_Manager.h"

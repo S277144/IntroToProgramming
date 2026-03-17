@@ -43,11 +43,11 @@ void Game::Initialize()
 	_resourceManager->loadTexture("End", "assets\\flag_green_b.png");
 	_resourceManager->loadTexture("Enemy", "assets\\snail_walk_a.png");
 
-	/*SDL_Texture* enemyTexture = _resourceManager->getTexture("Enemy");
+	SDL_Texture* enemyTexture = _resourceManager->getTexture("Enemy");
 	std::make_unique<Enemy>(Config::ScreenWidth / 2.0f, Config::ScreenHeight - 128);
-	std::vector<SDL_FRect> walkEFrame = { {  } };
+	std::vector<SDL_FRect> walkEFrame = { { Config::AnimFrameWidth, Config::AnimFrameHeight } };
 
-	_enemy->addAnimation("walkE", enemyTexture, walkEFrame);
+	/*_enemy->addAnimation("walkE", enemyTexture, walkEFrame);
 
 	_enemy->setAnimation("walkE");*/
 
@@ -144,9 +144,17 @@ void Game::update()
 
 	auto overlap = _world->check_collisions(_player->getRect());
 
-	if (overlap.h > 0.0f) {
+	if (overlap.h > 0.0f) 
+	{
 		_player->alterPosition(0.0f, -overlap.h);
 	}
+
+	/*auto overlap = _world->check_collisions(_player->getRect());
+
+	if (overlap.w = TileType::Enemy)
+	{
+		playerLife = false;
+	}*/
 }
 
 void Game::draw()

@@ -1,4 +1,5 @@
 #include "Player_Character.h"
+#include "Game.h"
 
 void PlayerCharacter::onPressed(Control control)
 {
@@ -40,6 +41,11 @@ void PlayerCharacter::moveRight()
 {
 	_direction = Direction::Right;
 	_velocity.x = 300;
+
+	/*if ()
+	{
+		TileType::Enemy
+	}*/
 }
 
 void PlayerCharacter::Jump()

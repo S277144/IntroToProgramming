@@ -15,4 +15,5 @@ namespace Config
 	const float TileHeight = 64.0f;
 
 	const float RenderScale = 1.0f;
+
 }

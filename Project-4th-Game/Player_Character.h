@@ -20,6 +20,8 @@ public:
 	void onPressed(Control control);
 	void onReleased(Control control);
 
+	bool playerLife{ true };
+
 private:
 	void moveLeft();
 	void moveRight();

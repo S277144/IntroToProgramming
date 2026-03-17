@@ -83,15 +83,15 @@ int main()
 	bool destroyedblocks[BlockColumns * BlockRows];
 	int sz = BlockColumns * BlockRows;
 
-	int Random(int min, int max);
-	{
-		int min = 1;
-		int max = 3;
+	//int Random(int min, int max);
+	//{
+	//	int min = 1;
+	//	int max = 3;
 
-		static std::random_device rd;
-		static std::mt19937 gen(rd());
-		std::uniform_real_distribution<int> dist(min, max);
-	}
+	//	static std::random_device rd;
+	//	static std::mt19937 gen(rd());
+	//	std::uniform_real_distribution<int> dist(min, max);
+	//}
 
 	// block Grid Spawning 
 
@@ -112,10 +112,10 @@ int main()
 			blocks[index].w = BlockWidth;
 			blocks[index].h = BlockHeight;
 
-			std::mt19937 rng(static_cast<unsigned>(std::time(nullptr)));
-			std::uniform_int_distribution<int> healthDist(1, 3);
+			/*std::mt19937 rng(static_cast<unsigned>(std::time(nullptr)));
+			std::uniform_int_distribution<int> healthDist(1, 3);*/
 
-			blockHealth[index] = healthDist(rng);
+			blockHealth[index] = 3;
 		}
 	}
 
