@@ -3,6 +3,7 @@
 #include <functional>
 #include <memory>
 
+//#include "Enemy.h"
 #include "Player_Character.h"
 #include "Animated_Object.h"
 #include "Resource_Manager.h"
@@ -63,6 +64,7 @@ private:
 
 	std::unique_ptr<ResourceManager> _resourceManager;
 	std::unique_ptr<PlayerCharacter> _player;
+	std::unique_ptr<PlayerCharacter> _enemy;
 	std::unique_ptr<World> _world;
 
 	std::map<SDL_Scancode, bool> _keyboardStatus;

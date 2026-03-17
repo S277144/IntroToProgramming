@@ -51,15 +51,15 @@ private:
 	MIX_Audio* shotAudio;
 	MIX_Audio* explosionAudio;
 
-	TTF_Font* _gameFont;
-	TTF_Font* _menuFont;
+	TTF_Font* _GameFont;
+	TTF_Font* _MenuFont;
 
 	Ship _Ship;
 
 	std::map<std::string, SDL_Texture*> _staticText;
 
 	std::vector<std::unique_ptr<Asteroid>> _Asteroids;
-	std::vector<std::unique_ptr<Bullet>> _Bulllets;
+	std::vector<std::unique_ptr<Bullet>> _Bullets;
 
 	SDL_Texture* _BulletTexture;
 

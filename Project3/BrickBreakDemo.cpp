@@ -2,6 +2,8 @@
 #include <SDL3\SDL.h>
 #include <format>
 #include <string>
+#include <random>
+#include <ctime>
 
 int main()
 {
@@ -40,14 +42,14 @@ int main()
 	const float PlayerOneX = 10.0f;
 
 	const float PlayerX = ScreenWidth / 2.0f - PadHeight / 2.0f;
-	const float PlayerSpeed{ 0.08f };
+	const float PlayerSpeed{ 0.1f };
 
 	SDL_FRect player_one{ PlayerOneX, ScreenHeight - 150, PadWidth, PadHeight };
 
 	const float BallDim{ 12.5f };
 	const float BallX = { ScreenWidth / 2.0f - BallDim / 2.0f };
 	const float BallY = { ScreenHeight / 2.0f - BallDim / 2.0f };
-	const float Ballspeed{ 0.05f };
+	const float Ballspeed{ 0.08f };
 
 	SDL_FRect ball{ BallX, BallY, BallDim, BallDim };
 
@@ -81,6 +83,16 @@ int main()
 	bool destroyedblocks[BlockColumns * BlockRows];
 	int sz = BlockColumns * BlockRows;
 
+	int Random(int min, int max);
+	{
+		int min = 1;
+		int max = 3;
+
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		std::uniform_real_distribution<int> dist(min, max);
+	}
+
 	// block Grid Spawning 
 
 	SDL_FRect blockRect{ BlockGap, BlockWidth, BlockHeight };
@@ -100,9 +112,13 @@ int main()
 			blocks[index].w = BlockWidth;
 			blocks[index].h = BlockHeight;
 
-			blockHealth[index] = 3;
+			std::mt19937 rng(static_cast<unsigned>(std::time(nullptr)));
+			std::uniform_int_distribution<int> healthDist(1, 3);
+
+			blockHealth[index] = healthDist(rng);
 		}
 	}
+
 
 	while (running)
 	{

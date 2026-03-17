@@ -39,9 +39,20 @@ void Game::Initialize()
 	_resourceManager = std::make_unique<ResourceManager>(_renderer);
 	_resourceManager->loadTexture("Player", "assets\\spritesheet-characters-default.png");
 	_resourceManager->loadTexture("World", "assets\\spritesheet-tiles-default.png");
+	_resourceManager->loadTexture("Coin", "assets\\coin_gold.png");
+	_resourceManager->loadTexture("End", "assets\\flag_green_b.png");
+	_resourceManager->loadTexture("Enemy", "assets\\snail_walk_a.png");
+
+	/*SDL_Texture* enemyTexture = _resourceManager->getTexture("Enemy");
+	std::make_unique<Enemy>(Config::ScreenWidth / 2.0f, Config::ScreenHeight - 128);
+	std::vector<SDL_FRect> walkEFrame = { {  } };
+
+	_enemy->addAnimation("walkE", enemyTexture, walkEFrame);
+
+	_enemy->setAnimation("walkE");*/
 
 	SDL_Texture* playerTexture = _resourceManager->getTexture("Player");
-	_player = std::make_unique<PlayerCharacter>(Config::ScreenWidth / 2.0f, Config::ScreenHeight / 2.0f);
+	_player = std::make_unique<PlayerCharacter>(Config::ScreenWidth / 2.0f, Config::ScreenHeight - 128);
 
 	std::vector<SDL_FRect> idleFrame = { { 3 * Config::AnimFrameWidth, 0.0f, Config::AnimFrameWidth, Config::AnimFrameHeight } };
 	std::vector<SDL_FRect> walkFrame =

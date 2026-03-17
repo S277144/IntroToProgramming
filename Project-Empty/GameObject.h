@@ -26,7 +26,7 @@ public:
 
 	float getAngle() const { return _Angle; }
 
-	float getradius() const { return _Radius; }
+	float getRadius() const { return _Radius; }
 
 	void flagForRemoval()
 	{

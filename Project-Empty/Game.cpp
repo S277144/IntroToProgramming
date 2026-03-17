@@ -2,7 +2,6 @@
 #include <string>
 #include <format>
 
-
 #include "Game.h"
 #include "Config.h"
 #include "Strings.h"
@@ -13,6 +12,7 @@ void Game::run()
 	{
 		update();
 		draw();
+
 	}
 }
 
@@ -25,7 +25,7 @@ void Game::initialize()
 	SDL_Window* window(nullptr);
 	SDL_Renderer* renderer(nullptr);
 
-	SDL_CreateWindowAndRenderer(ProjectName.c_str(), Config::ScreenWidth, Config::ScreenHeight, 0);
+	SDL_CreateWindowAndRenderer(Config::ProjectName.c_str(), Config::ScreenWidth, Config::ScreenHeight, 0, &window, &Renderer);
 
 	if (window == nullptr)
 	{
@@ -71,7 +71,7 @@ void Game::initialize()
 
 	for (auto& asteroid : _Asteroids)
 	{
-		asteroid->loadTexture(Renderer, "Assets\\Meteor_DLarge.png")
+		asteroid->loadTexture(Renderer, "Assets\\Meteor_DLarge.png");
 	}
 }
 
@@ -109,14 +109,14 @@ bool Game::initialize_mixer()
 	if (!shotTrack)
 	{
 		std::cerr << "Failed to create track: " << SDL_GetError();
-		return false
+		return false;
 	}
 
 	explosionTrack = MIX_CreateTrack(mixer);
 	if (!explosionTrack)
 	{
 		std::cerr << "Failed to create track: " << SDL_GetError();
-		return false
+		return false;
 	}
 
 	MIX_SetTrackAudio(shotTrack, shotAudio);
@@ -125,42 +125,42 @@ bool Game::initialize_mixer()
 	return true;
 }
 
-//bool Game::initialize_ttf()
-//{
-//	if (!TTF_Init())
-//	{
-//		std::cerr << "Failed to initialize TTF: " << SDL_GetError() << '\n';
-//		return false
-//	}
-//
-//	_GameFonts = TTF_OpenFront("Assets\\Instruction.otf", 22.0f);
-//	if (!_GameFonts)
-//	{
-//		std::cerr << "Couldn't open font: " << SDL_GetError() << '\n';
-//		return false;
-//	}
-//
-//	_MenuFonts = TTF_OpenFront("Assets\\Instruction.otf", 22.0f);
-//	if (!_MenuFonts)
-//	{
-//		std::cerr << "Couldn't open font: " << SDL_GetError() << '\n';
-//		return false;
-//	}
-//
-//	for (auto uiText : UI::strings)
-//	{
-//		SDL_Surface* Surface = TTF_RenderText_Blended(uiText.size == UI::textSize::Menu ? _MenuFont : _GameFont, uiText.str.c_str(), 0, SDL_Color{ 255, 255, 255, SDL_ALPHA_OPAQUE });
-//		if (Surface)
-//		{
-//			_StaticText[uiText.str] = SDL_CreateTextureFromSurface(Renderer, Surface);
-//			SDL_DestroySurface(Surface);
-//		}
-//	}
-//
-//	return true;
-//}
+bool Game::initialize_ttf()
+{
+	if (!TTF_Init())
+	{
+		std::cerr << "Failed to initialize TTF: " << SDL_GetError() << '\n';
+		return false;
+	}
 
-Uint32 controlFire(void* data, SDL_TimerIDD TimerID, Uint32 Interval)
+	_GameFont = TTF_OpenFont("Assets\\Instruction.otf", 22.0f);
+	if (!_GameFont)
+	{
+		std::cerr << "Couldn't open font: " << SDL_GetError() << '\n';
+		return false;
+	}
+
+	_MenuFont = TTF_OpenFont("Assets\\Instruction.otf", 22.0f);
+	if (!_MenuFont)
+	{
+		std::cerr << "Couldn't open font: " << SDL_GetError() << '\n';
+		return false;
+	}
+
+	for (auto uiText : UI::strings)
+	{
+		SDL_Surface* Surface = TTF_RenderText_Blended(uiText.size == UI::textSize::Menu ? _MenuFont : _GameFont, uiText.str.c_str(), 0, SDL_Color{ 255, 255, 255, SDL_ALPHA_OPAQUE });
+		if (Surface)
+		{
+			_staticText[uiText.str] = SDL_CreateTextureFromSurface(Renderer, Surface);
+			SDL_DestroySurface(Surface);
+		}
+	}
+
+	return true;
+}
+
+Uint32 controlFire(void* data, SDL_TimerID TimerID, Uint32 Interval)
 {
 	auto ship = static_cast<Ship*>(data);
 	ship->allowFire();
@@ -168,7 +168,7 @@ Uint32 controlFire(void* data, SDL_TimerIDD TimerID, Uint32 Interval)
 	return 0;
 }
 
-Uint32 destroyBullet(void* data, SDL_TimerIDD TimerID, Uint32 Interval)
+Uint32 destroyBullet(void* data, SDL_TimerID TimerID, Uint32 Interval)
 {
 	auto bullet = static_cast<Ship*>(data);
 	bullet->flagForRemoval();
@@ -192,17 +192,17 @@ void Game::update()
 		{
 			if (event.key.key == SDLK_ESCAPE) running = false;
 			if (event.key.key == SDLK_W) _Ship.startAccelerating();
-			if (event.key.key == SDLK_A) isAPressed = true;
-			if (event.key.key == SDLK_D) isDPressed = true;
-			if (event.key.key == SDLK_SPACE) isSPACEPressed = true;
+			if (event.key.key == SDLK_A) _RotateLeft = true;
+			if (event.key.key == SDLK_D) _RotateRight = true;
+			if (event.key.key == SDLK_SPACE) _firing = true;
 		}
 
 		if (event.type == SDL_EventType::SDL_EVENT_KEY_UP)
 		{
 			if (event.key.key == SDLK_W) _Ship.stopAccelerating();
-			if (event.key.key == SDLK_A) isAPressed = false;
-			if (event.key.key == SDLK_D) isDPressed = false;
-			if (event.key.key == SDLK_SPACE) isSPACEPressed = false;
+			if (event.key.key == SDLK_A) _RotateLeft = false;
+			if (event.key.key == SDLK_D) _RotateRight = false;
+			if (event.key.key == SDLK_SPACE) _firing = false;
 		}
 	}
 
@@ -244,9 +244,9 @@ void Game::update()
 		for (auto& asteroid : _Asteroids)
 		{
 			if (asteroid->shouldRemove()) continue;
-			auto bulletPos = Bullet->getPosition();
+			auto bulletPos = bullet->getPosition();
 			auto asteroidPos = asteroid->getPosition();
-			Vector2 diff{ bulletPos.x - asteroidPos.x, bulletPos.y - roidPos.y };
+			Vector2 diff{ bulletPos.x - asteroidPos.x, bulletPos.y - asteroidPos.y };
 			auto dist = diff.magnitude();
 
 			if (dist <= bullet->getRadius() + asteroid->getRadius())
@@ -266,9 +266,9 @@ void Game::update()
 
 	for (auto& asteroid : destroyedAsteroids)
 	{
-		auto& one = _Asteroids.emolace_back(std::make_unique<Asteroid>(asteroid->getPosition(), Size::Small));
+		auto& one = _Asteroids.emplace_back(std::make_unique<Asteroid>(asteroid->getPosition(), Size::Small));
 		one->loadTexture(Renderer, "Assets\\Meteor_DSmall.png");
-		auto& two = _Asteroids.emolace_back(std::make_unique<Asteroid>(asteroid->getPosition(), Size::Small));
+		auto& two = _Asteroids.emplace_back(std::make_unique<Asteroid>(asteroid->getPosition(), Size::Small));
 		two->loadTexture(Renderer, "Assets\\Meteor_DSmall.png");
 	}
 
@@ -301,7 +301,7 @@ void Game::draw()
 		asteroid->draw(Renderer);
 	}
 
-	for (auto& bullet : _Bullets);
+	for (auto& bullet : _Bullets)
 	{
 		bullet->draw(Renderer);
 	}

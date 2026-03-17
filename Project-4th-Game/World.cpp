@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 #include "World.h"
 #include "Player_Character.h"
 
@@ -71,3 +72,4 @@ void World::loadLevelFile(const std::string& path)
 		x++;
 	}
 }
+

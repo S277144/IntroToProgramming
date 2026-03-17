@@ -5,8 +5,8 @@ namespace Config
 {
 	const std::string ProjectName = "Platformer";
 
-	constexpr int ScreenWidth = 1280;
-	constexpr int ScreenHeight = 720;
+	constexpr int ScreenWidth = 2560;
+	constexpr int ScreenHeight = 700;
 
 	const float AnimFrameWidth = 128.0f;
 	const float AnimFrameHeight = 128.0f;

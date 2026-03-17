@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="Animated_Object.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Game_Object.h" />
     <ClInclude Include="Player_Character.h" />
